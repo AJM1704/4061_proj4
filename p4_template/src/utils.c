@@ -105,12 +105,15 @@ void init(int port) {
      accept_connection must should ignore request.
 ***********************************************/
 
-pthread_mutex_t log_mutex;
 int accept_connection(void) {
-
+  if (pthread_mutex_init(&log_mutex, NULL) != 0) {
+    perror("Failed to initialize log mutex");
+    exit(EXIT_FAILURE);
+  }
    //TODO: create a sockaddr_in struct to hold the address of the new connection
-  struct sockaddr_in new_con;
-   
+  struct sockaddr_in client_addr;
+  socklen_t addr_len = sizeof(client_addr);
+  
    /**********************************************
     * IMPORTANT!
     * ALL TODOS FOR THIS FUNCTION MUST BE COMPLETED FOR THE INTERIM SUBMISSION!!!!
@@ -121,12 +124,17 @@ int accept_connection(void) {
    // TODO: Aquire the mutex lock
   pthread_mutex_lock(&log_mutex);
    // TODO: Accept a new connection on the passive socket and save the fd to newsock
-
+  int new_sock_fd = accept(master_fd, (struct sockaddr *)&client_addr, &addr_len);
+  if (new_sock_fd < 0) {
+    perror("Accept failed");
+    pthread_mutex_unlock(&log_mutex);
+    return -1;
+  }
    // TODO: Release the mutex lock
   pthread_mutex_unlock(&log_mutex);
 
    // TODO: Return the file descriptor for the new client connection
-  return 
+  return new_sock_fd
 }
 
 
