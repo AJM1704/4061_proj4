@@ -27,11 +27,11 @@
 #include <stdint.h>
 
 //TODO: Declare a global variable to hold the file descriptor for the server socket
-
+#define int master_fd
 //TODO: Declare a global variable to hold the mutex lock for the server socket
-
+#define pthread_mutex_t server_socket_mutex = PTHREAD_MUTEX_INITIALIZER;
 //TODO: Declare a gloabl socket address struct to hold the address of the server
-global struct master_fd;
+#define struct global_serv_addr;
 
 /*
 ################################################
@@ -85,15 +85,17 @@ void init(int port) {
 
    // TODO: Mark the socket as a pasive socket. (ie: a socket that will be used to receive connections)
 
-   
-   
+  if (listen(server_fd, SOMAXCONN) < 0) {
+    perror("Listen failed");
+    exit(EXIT_FAILURE);
+  }
    
    // We save the file descriptor to a global variable so that we can use it in accept_connection().
    // TODO: Save the file descriptor to the global variable master_fd
   master_fd = server_fd;
-  
-   printf("UTILS.O: Server Started on Port %d\n",port);
-   fflush(stdout);
+
+  printf("UTILS.O: Server Started on Port %d\n",port);
+  fflush(stdout);
 
 }
 
