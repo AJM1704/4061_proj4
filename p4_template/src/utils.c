@@ -31,6 +31,7 @@
 //TODO: Declare a global variable to hold the mutex lock for the server socket
 
 //TODO: Declare a gloabl socket address struct to hold the address of the server
+global struct master_fd;
 
 /*
 ################################################
@@ -47,8 +48,9 @@
 ************************************************/
 void init(int port) {
    //TODO: create an int to hold the socket file descriptor
+  int server_fd;
    //TODO: create a sockaddr_in struct to hold the address of the server
-
+  struct sockaddr_in serv_addr;
 
    /**********************************************
     * IMPORTANT!
@@ -58,12 +60,28 @@ void init(int port) {
    
    
    // TODO: Create a socket and save the file descriptor to sd (declared above)
-   
+  server_fd = socket(AF_INET, SOCK_STREAM, 0);
+  if (server_fd == 0) {
+    perror("Socket failed");
+    exit(EXIT_FAILURE);
+  }
    // TODO: Change the socket options to be reusable using setsockopt(). 
+  int enable = 1;
+  if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0) {
+    perror("setsockopt failed");
+    exit(EXIT_FAILURE);
+  }
 
+  //Define the address
+  address.sin_family = AF_INET;
+  address.sin_addr.s_addr = INADDR_ANY;
+  address.sin_port = htons(PORT);
 
-   // TODO: Bind the socket to the provided port.
-  
+  // TODO: Bind the socket to the provided port.
+  if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
+    perror("Bind failed");
+    exit(EXIT_FAILURE);
+  }
 
    // TODO: Mark the socket as a pasive socket. (ie: a socket that will be used to receive connections)
 
@@ -72,7 +90,8 @@ void init(int port) {
    
    // We save the file descriptor to a global variable so that we can use it in accept_connection().
    // TODO: Save the file descriptor to the global variable master_fd
-
+  master_fd = server_fd;
+  
    printf("UTILS.O: Server Started on Port %d\n",port);
    fflush(stdout);
 
