@@ -106,10 +106,12 @@ void init(int port) {
    - if the return value is negative, the thread calling
      accept_connection must should ignore request.
 ***********************************************/
+
+pthread_mutex_t log_mutex;
 int accept_connection(void) {
 
    //TODO: create a sockaddr_in struct to hold the address of the new connection
-  
+  struct sockaddr_in new_con;
    
    /**********************************************
     * IMPORTANT!
@@ -119,14 +121,14 @@ int accept_connection(void) {
    
    
    // TODO: Aquire the mutex lock
-
+  pthread_mutex_lock(&log_mutex);
    // TODO: Accept a new connection on the passive socket and save the fd to newsock
 
    // TODO: Release the mutex lock
-
+  pthread_mutex_unlock(&log_mutex);
 
    // TODO: Return the file descriptor for the new client connection
-   
+  return 
 }
 
 
