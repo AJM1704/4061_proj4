@@ -15,11 +15,17 @@ How could you enable your program to make EACH individual request parallelized? 
 You could make a loop in main to create a thread pool. Where each individual request would be made parallelized. This would enable scalability, concurrency, and efficiency of resources.
 
 Main server loop:
+
 Use accept() to handle incoming connections
+
 Pass the client connection file descriptor (new_sock_fd) to a worker thread for handling
 
 Worker threads:
+
 Each thread processes the client’s request independently:
+
 Read the request
+
 Process the request
+
 Close the connection
