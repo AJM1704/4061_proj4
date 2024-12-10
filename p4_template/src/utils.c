@@ -191,15 +191,20 @@ char *get_request_server(int fd, size_t *filelength) {
 
   // TODO: get the size of the image from the packet
   int img_size = packet.size;
-  char *image_buffer = malloc(img_size * sizeof(char));
+  printf("image size %d \n", img_size);
+  char* image_buffer = malloc(sizeof(char) * (img_size + 1));
+  memset(image_buffer, 0 , img_size);
+  image_buffer[img_size] = '\0';
 
+  int nbytes;
   // TODO: recieve the file data and save into a buffer variable.
-  if (recv(fd, &image_buffer, img_size, 0) < 0) {
+  if ((nbytes = recv(fd, &image_buffer, img_size, 0)) < 0) {
     printf("Failed to recieve image data!");
   };
 
+
   // TODO: return the buffer
-  printf("exited grs\n");
+  printf("exited grs %d %d\n", nbytes, img_size);
   return image_buffer;
 }
 
@@ -286,7 +291,6 @@ int send_file_to_server(int socket, FILE *file, int size) {
 int receive_file_from_server(int socket, const char *filename) {
   printf("called rffs\n");
   // TODO: create a buffer to hold the file data
-  char *buf;
 
   // TODO: open the file for writing binary data
   FILE *fp = fopen(filename, "wb");
@@ -302,7 +306,7 @@ int receive_file_from_server(int socket, const char *filename) {
 
   // TODO: get the size of the image from the packet
   int img_size = packet.size;
-  buf = malloc(img_size);
+  char buf[img_size];
 
   // TODO: recieve the file data and write it to the file
   if (recv(socket, &buf, img_size, 0) < 0) {
