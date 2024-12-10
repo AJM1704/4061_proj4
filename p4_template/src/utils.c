@@ -192,19 +192,20 @@ char *get_request_server(int fd, size_t *filelength) {
   // TODO: get the size of the image from the packet
   int img_size = packet.size;
   printf("image size %d \n", img_size);
-  char* image_buffer = malloc(sizeof(char) * img_size);
+  char* image_buffer = (char*) malloc(sizeof(char) * img_size);
 
   int nbytes;
   // TODO: recieve the file data and save into a buffer variable.
-  if ((nbytes = recv(fd, &image_buffer, 1, 0)) < 0) {
+  if ((nbytes = recv(fd, image_buffer, img_size, 0)) < 0) {
     printf("Failed to recieve image data!");
   };
+
 
 
   // TODO: return the buffer
   *filelength = img_size;
   printf("exited grs %d %d\n", nbytes, img_size);
-  return (char*) image_buffer;
+  return image_buffer;
 }
 
 /*
