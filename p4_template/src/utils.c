@@ -148,7 +148,7 @@ int accept_connection(void) {
    - returns 0 on success, -1 on failure
 ************************************************/
 int send_file_to_client(int socket, char *buffer, int size) {
-  printf("called send fiel\n");
+  printf("called send file\n");
   // TODO: create a packet_t to hold the packet data
   packet_t packet = {.size = size};
 
@@ -161,7 +161,7 @@ int send_file_to_client(int socket, char *buffer, int size) {
 
   // TODO: send the file data
 
-  if (send(socket, &buffer, size, 0) < 0) {
+  if (send(socket, buffer, size, 0) < 0) {
     printf("Failed to send filesize packet!");
     return -1;
   };
