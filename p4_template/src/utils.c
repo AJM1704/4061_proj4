@@ -262,6 +262,15 @@ int send_file_to_server(int socket, FILE *file, int size) {
   }
 
   // TODO: send the file data
+  char buf[size];
+  fread(&buf, sizeof(char), size, file);
+
+  if (send(socket, &buf, size ,0) < 0) {
+    printf("Error sending image data to serv");
+    return -1;
+  }
+  
+
 
   // TODO: return 0 on success, -1 on failure
   printf("exited sfts\n");
