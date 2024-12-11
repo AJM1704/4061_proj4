@@ -45,6 +45,10 @@ struct sockaddr_in global_serv_addr;
    - initializes the connection acception/handling system
    - if init encounters any errors, it will call exit().
 ************************************************/
+
+// init function creates the socket address to hold the server address
+// it then binds the socket to the port
+
 void init(int port) {
   printf("called init\n");
   // TODO: create an int to hold the socket file descriptor
@@ -109,6 +113,9 @@ void init(int port) {
      accept_connection must should ignore request.
 ***********************************************/
 
+// accept connection holds address in socket address for new connections
+// it then locks and accept a connection on the socket and saves the fd
+
 int accept_connection(void) {
   printf("called accept conn\n");
   // TODO: create a sockaddr_in struct to hold the address of the new connection
@@ -147,6 +154,9 @@ int accept_connection(void) {
    - size is the size of the file you want to send
    - returns 0 on success, -1 on failure
 ************************************************/
+
+// sftc sends a packet of data to the client and then the file data
+
 int send_file_to_client(int socket, char *buffer, int size) {
   printf("called send file\n");
   // TODO: create a packet_t to hold the packet data
@@ -179,6 +189,10 @@ int send_file_to_client(int socket, char *buffer, int size) {
 of the file
    - returns a pointer to the file data
 ************************************************/
+
+// grs recieves packet from server, then it gets the size of the image
+// and then the file data
+
 char *get_request_server(int fd, size_t *filelength) {
   printf("called getreqserv\n");
   // TODO: create a packet_t to hold the packet data
@@ -220,6 +234,9 @@ char *get_request_server(int fd, size_t *filelength) {
    - initializes the connection to the server
    - if setup_connection encounters any errors, it will call exit().
 ************************************************/
+
+// setup connection creates socket and assigns IP and PORT 
+
 int setup_connection(int port) {
   printf("called setconn\n");
   // TODO: create a sockaddr_in struct to hold the address of the server
@@ -256,6 +273,10 @@ int setup_connection(int port) {
    - size is the size of the file you want to send
    - returns 0 on success, -1 on failure
 ************************************************/
+
+// sfts sends the file back to the server by sending the file size packet
+// and then the file data
+
 int send_file_to_server(int socket, FILE *file, int size) {
   printf("called sfts\n");
   // TODO: send the file size packet
@@ -288,6 +309,10 @@ int send_file_to_server(int socket, FILE *file, int size) {
    - filename is the name of the file you want to save
    - returns 0 on success, -1 on failure
 ************************************************/
+
+// rffs opens the file for writing and recieves the response
+// gets the size and recieves the data to write
+
 int receive_file_from_server(int socket, const char *filename) {
   printf("called rffs\n");
   // TODO: create a buffer to hold the file data
